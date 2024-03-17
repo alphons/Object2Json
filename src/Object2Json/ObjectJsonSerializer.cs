@@ -121,7 +121,7 @@ public class ObjectJsonSerializer
 			case IDictionary dict:
 				if (level > 0)
 					sb.Append($"{NL}");
-				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{t.FullName}\",{NL}");
+				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{t.AssemblyQualifiedName}\",{NL}");
 				var dicti = 0;
 				foreach (var key in dict.Keys)
 				{
@@ -137,7 +137,7 @@ public class ObjectJsonSerializer
 			default:
 				if (level > 0)
 					sb.Append($"{NL}");
-				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{t.FullName}\",{NL}");
+				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{t.AssemblyQualifiedName}\",{NL}");
 				var fis = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
 				for (int i = 0; i < fis.Length; i++)
 				{
@@ -184,7 +184,7 @@ public class ObjectJsonSerializer
 				{
 					var t = Type.GetType(className!.ToString());
 					if (t == null)
-						return new object();
+						throw new Exception($"can not find type {className}");
 
 					var arguments = t.GetGenericArguments();
 

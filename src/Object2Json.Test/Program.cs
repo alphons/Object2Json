@@ -1,5 +1,4 @@
 ﻿
-using System.Diagnostics;
 using System.Text.Json;
 
 namespace Object2Json.Test;
@@ -45,53 +44,6 @@ public class Tester
 		dict.Add("man", t1);
 		dict.Add("vrouw", t2);
 
-		var COUNT = 10000;
-
-		//var sw2 = Stopwatch.StartNew();
-		//for (int i = 0; i < COUNT; i++)
-		//{
-		//	var json2 = JsonSerializer.Serialize(dict);
-		//}
-		//Console.WriteLine(sw2.ElapsedMilliseconds + "mS");
-
-		//var sw1 = Stopwatch.StartNew();
-		//for (int i = 0; i < COUNT; i++)
-		//{
-		//	var json = BetterSerializer.Serialize(dict);
-		//}
-		//Console.WriteLine(sw1.ElapsedMilliseconds + "mS");
-
-		//var jsonA = JsonSerializer.Serialize(dict, new JsonSerializerOptions()
-		//{
-		//	WriteIndented = true
-		//});
-
-		//for (int i = 0; i < 10; i++)
-		//{
-
-		//	var jsonT = ObjectJsonSerializer.Serialize(dict, new JsonSerializerOptions()
-		//	{
-		//		WriteIndented = true
-		//	});
-
-		//	var dictcopyT = ObjectJsonSerializer.DeSerialize(jsonT);
-		//}
-		//// warm start ended
-		//var swA = Stopwatch.StartNew();
-		//for (int i = 0; i < COUNT; i++)
-		//{
-
-		//	var jsonT = ObjectJsonSerializer.Serialize(dict, new JsonSerializerOptions()
-		//	{
-		//		WriteIndented = true
-		//	});
-
-		//	var dictcopyT = ObjectJsonSerializer.DeSerialize(jsonT);
-		//}
-		//Console.WriteLine($"ended {swA.ElapsedMilliseconds}mS");
-		//return;
-
-
 		var json = ObjectJsonSerializer.Serialize(dict, new JsonSerializerOptions()
 		{
 			WriteIndented = true
@@ -103,6 +55,7 @@ public class Tester
 		{ 
 			WriteIndented = true 
 		});
+		//File.WriteAllText("test2.json", jsoncopy);
 
 		if (json == jsoncopy)
 			Console.WriteLine("same");
