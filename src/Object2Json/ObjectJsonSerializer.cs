@@ -7,10 +7,11 @@ using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Object2Json;
 
-public class ObjectJsonSerializer
+public partial class ObjectJsonSerializer
 {
 	private const string PropClass = "__class__"; // Newtonsoft $type
 	private const string Tabs = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
@@ -21,6 +22,20 @@ public class ObjectJsonSerializer
 		jsonSerializerOptions ??= JsonSerializerOptions.Default;
 		SerializeInternal(sb, 0, value, jsonSerializerOptions);
 		return sb.ToString();
+	}
+
+	[GeneratedRegex(@", Version=\d+.\d+.\d+.\d+|, Culture=\w+|, PublicKeyToken=\w+")]
+	private static partial Regex LesserRegex();
+
+	private static readonly Regex lesser = LesserRegex();
+
+	private static string AssemblyLessQualifiedName(Type? t)
+	{
+		var n = t?.AssemblyQualifiedName;
+		if (n != null)
+			return lesser.Replace(n, string.Empty);
+		else
+			return string.Empty;
 	}
 
 	private static void SerializeInternal(StringBuilder sb, int level, object? o, JsonSerializerOptions jsonSerializerOptions)
@@ -121,7 +136,7 @@ public class ObjectJsonSerializer
 			case IDictionary dict:
 				if (level > 0)
 					sb.Append($"{NL}");
-				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{t.AssemblyQualifiedName}\",{NL}");
+				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{AssemblyLessQualifiedName(t)}\",{NL}");
 				var dicti = 0;
 				foreach (var key in dict.Keys)
 				{
@@ -137,7 +152,7 @@ public class ObjectJsonSerializer
 			default:
 				if (level > 0)
 					sb.Append($"{NL}");
-				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{t.AssemblyQualifiedName}\",{NL}");
+				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{AssemblyLessQualifiedName(t)}\",{NL}");
 				var fis = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
 				for (int i = 0; i < fis.Length; i++)
 				{
@@ -256,6 +271,5 @@ public class ObjectJsonSerializer
 
 		return null;
 	}
-
 
 }
