@@ -197,10 +197,7 @@ public partial class ObjectJsonSerializer
 
 				if (o.Remove(PropClass, out JsonNode? className))
 				{
-					var t = Type.GetType(className!.ToString());
-					if (t == null)
-						throw new Exception($"can not find type {className}");
-
+					var t = Type.GetType(className!.ToString()) ?? throw new Exception($"can not find type {className}");
 					var arguments = t.GetGenericArguments();
 
 					var value = Activator.CreateInstance(t!);
