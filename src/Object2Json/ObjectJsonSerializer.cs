@@ -136,7 +136,10 @@ public partial class ObjectJsonSerializer
 			case IDictionary dict:
 				if (level > 0)
 					sb.Append($"{NL}");
-				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{AssemblyLessQualifiedName(t)}\",{NL}");
+				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{AssemblyLessQualifiedName(t)}\"");
+				if (dict.Keys.Count > 0)
+					sb.Append(',');
+				sb.Append($"{NL}");
 				var dicti = 0;
 				foreach (var key in dict.Keys)
 				{
@@ -152,8 +155,11 @@ public partial class ObjectJsonSerializer
 			default:
 				if (level > 0)
 					sb.Append($"{NL}");
-				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{AssemblyLessQualifiedName(t)}\",{NL}");
+				sb.Append($"{S}{{{NL}{SS}\"{PropClass}\": \"{AssemblyLessQualifiedName(t)}\"");
 				var fis = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+				if (fis.Length > 0)
+					sb.Append(',');
+				sb.Append($"{NL}");
 				for (int i = 0; i < fis.Length; i++)
 				{
 					var fi = fis[i];
